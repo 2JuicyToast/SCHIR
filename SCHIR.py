@@ -951,7 +951,14 @@ def runSim(max_days):
             time_of_day = 0
             day += 1
         
-        # 6. transition 
+        # 6. Updates
+        for person in carrier_list[:]:
+            person.progressionIncrease()
+            
+        for person in hybrid_list[:]:
+            person.infectionGrowth()
+            
+        # 7. transition 
         # [:] = copy of list, protects against skipping due to removing & adding objects
         for person in susceptible_list[:]:
             person.transition()
