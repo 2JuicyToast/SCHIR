@@ -7,16 +7,16 @@ To define each state:
 # Susceptible:
 Susceptibles are normal people who aren't infected. From this state, they can go to Carrier, Hybrid, Infected, and Removed. This is the state with the most transitions.
 
-# Carrier 
+# Carrier: 
 Carriers are infected, yet do not show symptoms. They can infect Susceptibles, but can only transition to removed. When their progression reaches 10, they die immediately. They also have a chance of dying randomly based on their transition rate.
 
-# Hybrid 
+# Hybrid: 
 Hybrids are in a middle state between Susceptible and Infected. They have a chance of recovering, but if they don't recover, they move closer to becoming infected. This State was added to introduce more movement into the SIR model, and also provide a means of recovery while keeping the Removed state.
 
-# Infected
+# Infected:
 Infected is a state from the original SIR model. They represent those who have caught the "virus" in the model. They infect others, and before could only die. However, with the added Hybrid class, they have a small chance of becoming Hybrid, and from there, they can recover to Susceptible.
 
-# Removed
+# Removed:
 For this model, R was chosen to represent Removed. Anyone who dies within the simulation will be removed, and they will no longer be part of the simulation. This end-state is where everyone in the simulation will eventually end up.
 
 # Susceptible Transitions
