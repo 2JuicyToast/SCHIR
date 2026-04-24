@@ -27,14 +27,6 @@ The following transitions and rates are listed below
 **Omega (S-H)**: 0.010   
 **Gamma (S-R)** 0.001
 
-# Susceptible Transitions
-The transitions and rates are listed below
-
-**Alpha (S-I)**: 0.018  
-**Theta (S-C)**: 0.006   
-**Omega (S-H)**: 0.010   
-**Gamma (S-R)** 0.001
-
 # Carrier Transitions
 The transitions and rates are listed below
 
