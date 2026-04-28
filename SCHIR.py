@@ -19,49 +19,53 @@ removed_list = []
 '''
 function expected_statistics(S, C, H, I, R, Time)
     define transition rates:
-        
         rate_S_to_I, rate_S_to_R, rate_S_to_H, rate_S_to_C
         rate_I_to_R, rate_I_to_H
         rate_H_to_S, rate_H_to_I, rate_H_to_R
         rate_C_to_R
-        
-    current_time = []
-    s_count = [S]
-    c_count = [C]
-    h_count = [H]
-    i_count = [I]
-    r_count = [R]
-    
-    for each unit of time from 0 including Time:
-        transitioned_S_to_I = S * rate_S_to_I
-        transitioned_I_to_R = I * rate_I_to_R
-        transitioned_S_to_R = S * rate_S_to_R
 
-        transitioned_S_to_H = S * rate_S_to_H
-        transitioned_I_to_H = I * rate_I_to_H
+    initialize lists:
+        current_time = [0]
+        s_count = [S]
+        c_count = [C]
+        h_count = [H]
+        i_count = [I]
+        r_count = [R]
 
-        transitioned_H_to_S = H * rate_H_to_S
-        transitioned_H_to_I = H * rate_H_to_I
-        transitioned_H_to_R = H * rate_H_to_R
+    for each time step t from 0 to Time:
+        compute transitions:
+            transitioned_S_to_I = S * rate_S_to_I
+            transitioned_S_to_R = S * rate_S_to_R
+            transitioned_S_to_H = S * rate_S_to_H
+            transitioned_S_to_C = S * rate_S_to_C
 
-        transitioned_S_to_C = S * rate_S_to_C
-        transitioned_C_to_R = C * rate_C_to_R
+            transitioned_I_to_R = I * rate_I_to_R
+            transitioned_I_to_H = I * rate_I_to_H
 
-        S = S - (transitioned_S_to_I + transitioned_S_to_R + transitioned_S_to_H + transitioned_S_to_C) + transitioned_H_to_S
-        C = C + transitioned_S_to_C - transitioned_C_to_R
-        H = H + (transitioned_S_to_H + transitioned_I_to_H) - (transitioned_H_to_S + transitioned_H_to_I + transitioned_H_to_R)
-        I = I + (transitioned_S_to_I + transitioned_H_to_I) - transitioned_I_to_R - transitioned_I_to_H
-        R = R + transitioned_S_to_R + transitioned_I_to_R + transitioned_H_to_R + transitioned_C_to_R
-        
-        add S to s_list
-        add C to c_list
-        add H to h_list
-        add I to i_list
-        add R to r_list
-    
-        add t to current_time[]
-        
-    return(S, C, H, I, R, Time)
+            transitioned_H_to_S = H * rate_H_to_S
+            transitioned_H_to_I = H * rate_H_to_I
+            transitioned_H_to_R = H * rate_H_to_R
+
+            transitioned_C_to_R = C * rate_C_to_R
+
+        update populations:
+            S = S - (all S-out transitions) + transitioned_H_to_S
+            C = C + transitioned_S_to_C - transitioned_C_to_R
+            H = H + (S→H + I→H) - (H→S + H→I + H→R)
+            I = I + (S→I + H→I) - (I→R + I→H)
+            R = R + (all transitions into R)
+
+        append t to current_time
+        append S to s_count
+        append C to c_count
+        append H to h_count
+        append I to i_count
+        append R to r_count
+
+    plot current_time vs all population lists
+    label axes and show graph
+
+    return final values of S, C, H, I, R
 '''
 
 ALPHA   = 0.018   # (Susceptible becomes Infected)
@@ -833,7 +837,23 @@ class Removed(object):
 procedure runSim(max_days)
     set time_of_day = 0
     set day = 0
-
+    
+    initialize empty lists:
+        day_count
+        susceptible_count
+        carrier_count
+        hybrid_count
+        infected_count
+        removed_count
+        
+    append initial values:
+        append 0 to day_count
+        append size of susceptible_list to susceptible_count
+        append size of carrier_list to carrier_count
+        append size of hybrid_list to hybrid_count
+        append size of infected_list to infected_count
+        append size of removed_list to removed_count
+        
     WHILE day < max_days:
 
         for each person in susceptible_list:
@@ -908,6 +928,13 @@ procedure runSim(max_days)
         if time_of_day == 24:
             set time_of_day = 0
             set day = day + 1
+            
+            append day to day_count
+            append size of susceptible_list to susceptible_count
+            append size of carrier_list to carrier_count
+            append size of hybrid_list to hybrid_count
+            append size of infected_list to infected_count
+            append size of removed_list to removed_count
 
         for each person in a copy of susceptible_list:
             call person.transition()
@@ -920,6 +947,14 @@ procedure runSim(max_days)
 
         for each person in a copy of infected_list:
             call person.transition()
+
+    plot day_count vs susceptible_count in blue
+    plot day_count vs carrier_count in yellow
+    plot day_count vs hybrid_count in orange
+    plot day_count vs infected_count in green
+    plot day_count vs removed_count in red
+
+    label axes and show graph
 '''
 
 def runSim(max_days):
