@@ -1,46 +1,72 @@
 # SCHIR
-An active sim for the SIR+ model, including Carrier(C) and Hybrid (H).
 
-The SIR model (Susceptible, Infected, and Removed or Recovered) is a model used to simulate a Zombie Apocalypse. The SCHIR model is a SIR+ model with the added states Carrier and Hybrid.
-To define each state:
------
-# Susceptible:
-Susceptibles are normal people who aren't infected. From this state, they can go to Carrier, Hybrid, Infected, and Removed. This is the state with the most transitions.
+An active simulation of the SIR+ model, including the Carrier (C) and Hybrid (H) states.
 
-# Carrier: 
-Carriers are infected, yet do not show symptoms. They can infect Susceptibles, but can only transition to removed. When their progression reaches 10, they die immediately. They also have a chance of dying randomly based on their transition rate.
+**Please Note:** This project requires **NumPy** and **Matplotlib** to run properly. Make sure to install these packages using your preferred console or environment (such as Anaconda Prompt, PowerShell, or Terminal). If you prefer not to install these packages, you may comment out the NumPy/Matplotlib import lines and any code that depends on them.
 
-# Hybrid: 
-Hybrids are in a middle state between Susceptible and Infected. They have a chance of recovering, but if they don't recover, they move closer to becoming infected. This State was added to introduce more movement into the SIR model, and also provide a means of recovery while keeping the Removed state.
+---
 
-# Infected:
-Infected is a state from the original SIR model. They represent those who have caught the "virus" in the model. They infect others, and before could only die. However, with the added Hybrid class, they have a small chance of becoming Hybrid, and from there, they can recover to Susceptible.
+## Overview
 
-# Removed:
-For this model, R was chosen to represent Removed. Anyone who dies within the simulation will be removed, and they will no longer be part of the simulation. This end-state is where everyone in the simulation will eventually end up.
+The traditional SIR model (Susceptible, Infected, Removed/Recovered) is often used to simulate disease spread — including fictional scenarios like a zombie outbreak.  
+The **SCHIR** model extends SIR by adding two additional states:
 
-# Susceptible Transitions
-The following transitions and rates are listed below
+- Carrier (C)  
+- Hybrid (H)
 
-**Aalpha (S-I)**: 0.018  
-**Theta (S-C)**: 0.006   
-**Omega (S-H)**: 0.010   
-**Gamma (S-R)** 0.001
+These states introduce more realistic movement, partial recovery, and multi‑stage infection behavior.
 
-# Carrier Transitions
-The transitions and rates are listed below
+---
 
-**Iota (C-R)**: 0.003
+## State Definitions
 
-# Hybrid Transitions
-The transitions and rates are listed below
+### Susceptible (S)
+Normal individuals who are not infected. They can transition into Carrier, Hybrid, Infected, or Removed. This state has the most possible transitions.
 
-**Delta (H-S)**: 0.020  
-**Eta (H-I)**: 0.012  
-**Zeta (H-R)**: 0.005
+### Carrier (C)
+Individuals who are infected but asymptomatic. They can infect Susceptibles but can only transition to Removed. Carriers die immediately when their progression reaches 10, and they also have a random chance of dying based on their transition rate.
 
-# Infected Transitions
-The transitions and rates are listed below
+### Hybrid (H)
+A middle state between Susceptible and Infected. Hybrids may recover back to Susceptible or progress toward becoming Infected. This state adds more movement and recovery dynamics to the model while preserving the Removed state.
 
-**Epsilon (I-H)**: 0.003  
-**Beta (I-R)**: 0.008   
+### Infected (I)
+A state from the original SIR model. Infected individuals spread the “virus.” With the addition of Hybrids, they now have a small chance of transitioning into a Hybrid before potentially recovering.
+
+### Removed (R)
+Represents individuals who have died or otherwise left the simulation. All individuals eventually end up in this state.
+
+---
+
+<img width="829" height="686" alt="Screenshot 2026-04-28 140909" src="https://github.com/user-attachments/assets/05664b9b-7ac6-4029-b213-49becbfd9b4e" />
+
+
+## Transition Rates
+
+### Susceptible Transitions
+**Alpha (S → I):** 0.018  
+**Theta (S → C):** 0.006  
+**Omega (S → H):** 0.010  
+**Gamma (S → R):** 0.001  
+
+### Carrier Transitions
+**Iota (C → R):** 0.003  
+
+### Hybrid Transitions
+**Delta (H → S):** 0.020  
+**Eta (H → I):** 0.012  
+**Zeta (H → R):** 0.005  
+
+### Infected Transitions
+**Epsilon (I → H):** 0.003  
+**Beta (I → R):** 0.008  
+
+## Features
+
+- Full SCHIR (Susceptible–Carrier–Hybrid–Infected–Removed) simulation model  
+- Agent-based movement with Manhattan-distance interactions  
+- Randomized infection, recovery, and death events  
+- Daily population tracking and graph generation  
+- Deterministic “Expected Statistics” model for comparison  
+- Adjustable simulation length and transition rates  
+- Modular class-based design for easy modification  
+
