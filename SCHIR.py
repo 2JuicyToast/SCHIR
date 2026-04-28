@@ -5,6 +5,8 @@ Created on Wed Apr  8 09:11:07 2026
 @author: Bacon
 """
 
+import matplotlib.pyplot as plt
+import numpy as np
 import random
 import time
 
@@ -17,11 +19,19 @@ removed_list = []
 '''
 function expected_statistics(S, C, H, I, R, Time)
     define transition rates:
+        
         rate_S_to_I, rate_S_to_R, rate_S_to_H, rate_S_to_C
         rate_I_to_R, rate_I_to_H
         rate_H_to_S, rate_H_to_I, rate_H_to_R
         rate_C_to_R
-
+        
+    current_time = []
+    s_count = [S]
+    c_count = [C]
+    h_count = [H]
+    i_count = [I]
+    r_count = [R]
+    
     for each unit of time from 0 including Time:
         transitioned_S_to_I = S * rate_S_to_I
         transitioned_I_to_R = I * rate_I_to_R
@@ -42,7 +52,15 @@ function expected_statistics(S, C, H, I, R, Time)
         H = H + (transitioned_S_to_H + transitioned_I_to_H) - (transitioned_H_to_S + transitioned_H_to_I + transitioned_H_to_R)
         I = I + (transitioned_S_to_I + transitioned_H_to_I) - transitioned_I_to_R - transitioned_I_to_H
         R = R + transitioned_S_to_R + transitioned_I_to_R + transitioned_H_to_R + transitioned_C_to_R
-
+        
+        add S to s_list
+        add C to c_list
+        add H to h_list
+        add I to i_list
+        add R to r_list
+    
+        add t to current_time[]
+        
     return(S, C, H, I, R, Time)
 '''
 
@@ -61,6 +79,14 @@ THETA   = 0.006   # (Susceptible becomes Carrier)
 IOTA    = 0.003   # (Carrier becomes Removed)
 
 def expected_statistics(S, C, H, I, R, Time):
+    # plotting list
+    current_time = [0]
+    s_count = [S]
+    c_count = [C]
+    h_count = [H]
+    i_count = [I]
+    r_count = [R]
+    
     for t in range(Time + 1):
         # base transitions
         aTrans = S * ALPHA
@@ -85,7 +111,28 @@ def expected_statistics(S, C, H, I, R, Time):
         H = max(H + (oTrans + epTrans) - (dTrans + etTrans + zTrans), 0)
         I = max(I + (aTrans + etTrans) - bTrans - epTrans, 0)
         R = max(R + bTrans + gTrans + zTrans + iTrans, 0)
-
+        
+        # update list
+        current_time.append(t)
+        s_count.append(S)
+        c_count.append(C)
+        h_count.append(H)
+        i_count.append(I)
+        r_count.append(R)
+        
+    # create plot 
+    plt.plot(current_time, s_count, color= 'blue', label='Susceptible')
+    plt.plot(current_time, c_count, color= 'yellow', label='Carrier')
+    plt.plot(current_time, h_count, color= 'orange', label='Hybrid')
+    plt.plot(current_time, i_count, color= 'green', label='Infected')
+    plt.plot(current_time, r_count, color= 'red', label='Removed')
+    
+    plt.xlabel("Time")
+    plt.ylabel("Population")
+    plt.title("Expected Statistics")
+    plt.legend()
+    plt.show()
+  
     return (int(S), int(C), int(H), int(I), int(R), t)
 
 '''
@@ -880,6 +927,22 @@ def runSim(max_days):
     time_of_day = 0
     day = 0
     
+    # plotting list
+    day_count = []
+    susceptible_count = []
+    carrier_count = []
+    hybrid_count = []
+    infected_count = []
+    removed_count = []
+    
+    # base num for list
+    day_count.append(0)
+    susceptible_count.append(len(susceptible_list))
+    carrier_count.append(len(carrier_list))
+    hybrid_count.append(len(hybrid_list))
+    infected_count.append(len(infected_list))
+    removed_count.append(len(removed_list))
+
     while day < max_days:
         # 1. susceptible's move, interaction predefined 
         for person in susceptible_list:
@@ -950,6 +1013,15 @@ def runSim(max_days):
         if time_of_day == 24:
             time_of_day = 0
             day += 1
+            
+            # plotting list
+            day_count.append(day)
+            susceptible_count.append(len(susceptible_list))
+            carrier_count.append(len(carrier_list))
+            hybrid_count.append(len(hybrid_list))
+            infected_count.append(len(infected_list))
+            removed_count.append(len(removed_list))
+
         
         # 6. Updates
         for person in carrier_list[:]:
@@ -970,6 +1042,20 @@ def runSim(max_days):
             person.transition()
         
         time.sleep(0.01)
+        
+    # create plot 
+    plt.plot(day_count, susceptible_count, color='blue', label='Susceptible')
+    plt.plot(day_count, carrier_count, color='yellow', label='Carrier')
+    plt.plot(day_count, hybrid_count, color='orange', label='Hybrid')
+    plt.plot(day_count, infected_count, color='green', label='Infected')
+    plt.plot(day_count, removed_count, color='red', label='Removed')
+    
+    plt.xlabel("Time (days)")
+    plt.ylabel("Population")
+    plt.title("Simulation Statistics")
+    plt.legend()
+    plt.show()
+
         
 ''' 
 Starters:
@@ -992,6 +1078,7 @@ hugh  = Hybrid("Hugh")
 ivan  = Infected("Ivan")
 iris  = Infected("Iris")
 ian   = Infected("Ian")
+
 '''
 
 
