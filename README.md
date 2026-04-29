@@ -37,7 +37,8 @@ Represents individuals who have died or otherwise left the simulation. All indiv
 
 ---
 
-<img width="829" height="686" alt="Screenshot 2026-04-28 140909" src="https://github.com/user-attachments/assets/05664b9b-7ac6-4029-b213-49becbfd9b4e" />
+<img width="809" height="680" alt="image" src="https://github.com/user-attachments/assets/9f0e3597-b958-4e71-9782-71ad65f51561" />
+
 
 
 ## Transition Rates
