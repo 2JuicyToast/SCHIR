@@ -1066,7 +1066,7 @@ def runSim(max_days):
             person.infectionGrowth()
             
         # 7. transition 
-        # [:] = copy of list, protects against skipping due to removing & adding objects
+        # [:] = shallow copy of list, protects against skipping due to removing & adding objects
         for person in susceptible_list[:]:
             person.transition()
         for person in carrier_list[:]:
